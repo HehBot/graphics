@@ -22,8 +22,8 @@ MAIN_OBJ := $(BUILD_DIR)/main.cc.o
 
 DEPS := $(OBJS:.o=.d) $(MAIN_OBJ:.o=.d)
 
-CXX_FLAGS := -Wall -Wpedantic -Werror -fPIC -I$(SRC_DIR) -MMD -MP
-CC_FLAGS := -Wall -Wpedantic -Werror -fPIC -I$(SRC_DIR) -MMD -MP
+CXX_FLAGS := -Wall -Wpedantic -Werror -g -fPIC -I$(SRC_DIR) -MMD -MP
+CC_FLAGS := -fPIC -I$(SRC_DIR) -MMD -MP
 LD_FLAGS := -L$(LIB_DIR)
 LIB_FLAGS :=  -lGL -lGLU -lglfw -lX11 -lpthread -ldl
 
