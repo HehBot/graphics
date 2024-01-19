@@ -54,6 +54,7 @@ public:
     ShaderDataType type;
     uint32_t size;
     bool normalised;
+    size_t offset;
 
     BufferElement() = default;
     BufferElement(ShaderDataType type, std::string const& name, bool normalised = false)
@@ -73,9 +74,9 @@ public:
         case ShaderDataType::Float4:
             return 4;
         case ShaderDataType::Mat3:
-            return 3;
+            return 3; // 3 x 3
         case ShaderDataType::Mat4:
-            return 4;
+            return 4; // 4 x 4
         case ShaderDataType::Int:
             return 1;
         case ShaderDataType::Int2:
@@ -89,10 +90,6 @@ public:
         }
         return 0;
     }
-
-private:
-    uint32_t offset;
-    friend class BufferLayout;
 };
 
 class BufferLayout {
@@ -115,7 +112,7 @@ public:
 private:
     void calculate_offsets_and_strides()
     {
-        uint32_t offset = 0;
+        size_t offset = 0;
         for (auto& element : elements) {
             element.offset = offset;
             offset += element.size;

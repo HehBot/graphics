@@ -7,6 +7,7 @@
 #include <iostream>
 #include <memory>
 #include <renderer.h>
+#include <vertexarray.h>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
@@ -99,22 +100,15 @@ int main()
     uint32_t index_count = sizeof(indices) / sizeof(indices[0]);
 
     std::shared_ptr<VertexBuffer> vbo = VertexBuffer::create(vertices, sizeof(vertices));
+    vbo->set_layout({ { ShaderDataType::Float3, "aPos" } });
     std::shared_ptr<IndexBuffer> ibo = IndexBuffer::create(indices, index_count);
+    std::shared_ptr<VertexArray> vao = VertexArray::create();
 
-    unsigned int VAO;
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
-
-    vbo->bind();
-    ibo->bind();
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
+    vao->add_vertex_buffer(vbo);
+    vao->set_index_buffer(ibo);
 
     //     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    // render loop
-    // -----------
     while (!glfwWindowShouldClose(window)) {
         processInput(window);
 
@@ -123,35 +117,24 @@ int main()
 
         // draw our first triangle
         glUseProgram(shaderProgram);
-        renderer->draw_indexed(VAO, index_count);
+        renderer->draw_indexed(vao, index_count);
 
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    // optional: de-allocate all resources once they've outlived their purpose:
-    // ------------------------------------------------------------------------
-    glDeleteVertexArrays(1, &VAO);
     glDeleteProgram(shaderProgram);
 
-    // glfw: terminate, clearing all previously allocated GLFW resources.
-    // ------------------------------------------------------------------
     //     glfwTerminate();
     return 0;
 }
 
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow* window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 }
 
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
-// ---------------------------------------------------------------------------------------------
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     // make sure the viewport matches the new window dimensions; note that width and

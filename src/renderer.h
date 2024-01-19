@@ -3,6 +3,7 @@
 
 #include <glm/glm.hpp>
 #include <memory>
+#include <vertexarray.h>
 
 class Renderer {
 public:
@@ -18,10 +19,8 @@ public:
     virtual void set_clear_color(glm::vec4 const& color) = 0;
     virtual void clear() = 0;
 
-    //         virtual void draw_indexed(std::shared_ptr<VertexArray> vertex_array, uint32_t indexCount) = 0;
-    //         virtual void draw_lines(std::shared_ptr<VertexArray> vertex_array, uint32_t vertex_count) = 0;
-    virtual void draw_indexed(int vertex_array, uint32_t indexCount) = 0;
-    virtual void draw_lines(int vertex_array, uint32_t vertex_count) = 0;
+    virtual void draw_indexed(std::shared_ptr<VertexArray> vertex_array, uint32_t indexCount) = 0;
+    virtual void draw_lines(std::shared_ptr<VertexArray> vertex_array, uint32_t vertex_count) = 0;
 
     static API get_api() { return api; }
     static std::unique_ptr<Renderer> create();

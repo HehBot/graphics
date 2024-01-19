@@ -2,6 +2,8 @@
 
 #include <glad/glad.h>
 #include <iostream>
+#include <memory>
+#include <vertexarray.h>
 
 void OpenGLRenderer::init()
 {
@@ -20,13 +22,13 @@ void OpenGLRenderer::clear()
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void OpenGLRenderer::draw_indexed(int vertex_array, uint32_t index_count)
+void OpenGLRenderer::draw_indexed(std::shared_ptr<VertexArray> vertex_array, uint32_t index_count)
 {
-    glBindVertexArray(vertex_array);
+    vertex_array->bind();
     glDrawElements(GL_TRIANGLES, index_count, GL_UNSIGNED_INT, nullptr);
 }
-void OpenGLRenderer::draw_lines(int vertex_array, uint32_t vertex_count)
+void OpenGLRenderer::draw_lines(std::shared_ptr<VertexArray> vertex_array, uint32_t vertex_count)
 {
-    glBindVertexArray(vertex_array);
+    vertex_array->bind();
     glDrawArrays(GL_LINES, 0, vertex_count);
 }
