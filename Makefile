@@ -18,7 +18,7 @@ TARGET_DYNAMIC_LIB := lib$(TARGET_LIB_NAME).so
 
 SRCS := $(shell find $(SRC_DIRS) -name '*.cc' -or -name '*.c')
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
-MAIN_OBJ := $(BUILD_DIR)/main.cc.o
+MAIN_OBJ := $(BUILD_DIR)/test/main.cc.o
 
 DEPS := $(OBJS:.o=.d) $(MAIN_OBJ:.o=.d)
 
