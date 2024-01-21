@@ -1,5 +1,5 @@
-#include <GLFW/glfw3.h>
 #include <buffer.h>
+#include <event.h>
 #include <graphicscontext.h>
 #include <iostream>
 #include <memory>
@@ -8,21 +8,32 @@
 #include <vertexarray.h>
 #include <window.h>
 
-void framebuffer_size_callback(GLFWwindow* _w, int width, int height);
-void processInput(GLFWwindow* _w);
-
-unsigned int const SCR_WIDTH = 800, SCR_HEIGHT = 600;
-
 int main()
 {
     std::shared_ptr<GraphicsContext> context = GraphicsContext::create();
-    std::unique_ptr<Window> window = Window::create(context, Window::Prop { "graphics", SCR_WIDTH, SCR_HEIGHT });
-
-    GLFWwindow* _w = (GLFWwindow*)window->get_native_handle();
-    //     glfwSetFramebufferSizeCallback(_w, framebuffer_size_callback);
-
+    std::unique_ptr<Window> window = Window::create(context, Window::Prop { "graphics", 800, 600 });
     std::unique_ptr<Renderer> renderer = Renderer::create();
     std::shared_ptr<Shader> shader = Shader::create({ "test/vert.glsl", "test/frag.glsl" });
+
+    bool window_should_close = false;
+
+    EventCallbackFn callback = [&window_should_close](Event& event) {
+        event.handled = true;
+        switch (event.get_type()) {
+        case EventType::WindowClose:
+            window_should_close = true;
+            break;
+        case EventType::KeyPressed: {
+            KeyPressedEvent& e = dynamic_cast<KeyPressedEvent&>(event);
+            if (e.get_key() == Key::Escape)
+                window_should_close = true;
+            break;
+        }
+        default:
+            event.handled = false;
+        }
+    };
+    window->set_event_callback(callback);
 
     float vertices[] = {
         0.5f, 0.5f, 0.0f, // top right
@@ -44,11 +55,7 @@ int main()
     vao->add_vertex_buffer(vbo);
     vao->set_index_buffer(ibo);
 
-    //     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-    while (!glfwWindowShouldClose(_w)) {
-        processInput(_w);
-
+    while (!window_should_close) {
         renderer->set_clear_color({ 0.2f, 0.3f, 0.3f, 1.0f });
         renderer->clear();
 
@@ -56,22 +63,8 @@ int main()
         shader->bind();
         renderer->draw_indexed(vao, index_count);
 
-        window->swap_buffers();
-        glfwPollEvents();
+        window->on_update();
     }
 
     return 0;
 }
-
-void processInput(GLFWwindow* _w)
-{
-    if (glfwGetKey(_w, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(_w, true);
-}
-
-// void framebuffer_size_callback(GLFWwindow* _w, int width, int height)
-// {
-//     // make sure the viewport matches the new _w dimensions; note that width and
-//     // height will be significantly larger than specified on retina displays.
-//     glViewport(0, 0, width, height);
-// }

@@ -16,7 +16,7 @@ TARGET_EXEC := $(TARGET_EXEC_NAME)
 TARGET_STATIC_LIB := lib$(TARGET_LIB_NAME).a
 TARGET_DYNAMIC_LIB := lib$(TARGET_LIB_NAME).so
 
-SRCS := $(shell find $(SRC_DIRS) -name '*.cc' -or -name '*.c')
+SRCS := $(shell find $(SRC_DIR) -name '*.cc' -or -name '*.c')
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 MAIN_OBJ := $(BUILD_DIR)/test/main.cc.o
 

@@ -10,24 +10,30 @@ struct GLFWwindow;
 class LinuxWindow : public Window {
 public:
     LinuxWindow(std::shared_ptr<GraphicsContext> context, Window::Prop const& props);
-    virtual ~LinuxWindow() { }
+    virtual ~LinuxWindow();
 
-    //         virtual void set_event_callback(EventCallbackFn const& callback) override;
+    virtual void set_event_callback(std::function<void(Event&)> const& callback) override { data.event_callback = callback; }
 
-    virtual void swap_buffers();
+    virtual void on_update();
 
-    virtual uint32_t get_width() const override { return width; }
-    virtual uint32_t get_heigth() const override { return height; }
+    virtual uint32_t get_width() const override { return data.width; }
+    virtual uint32_t get_heigth() const override { return data.height; }
 
     virtual void set_vsync(bool enable) override;
-    virtual bool is_vsync() const override { return vsync; }
+    virtual bool is_vsync() const override { return data.vsync; }
 
     virtual void* get_native_handle() const override { return (void*)window_handle; }
 
 private:
+    std::shared_ptr<GraphicsContext> context;
     GLFWwindow* window_handle;
-    uint32_t width, height;
-    bool vsync;
+
+    struct Data {
+        std::string title;
+        uint32_t width, height;
+        bool vsync;
+        EventCallbackFn event_callback;
+    } data;
 };
 
 #endif // LINUXWINDOW_H
