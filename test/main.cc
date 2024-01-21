@@ -1,38 +1,27 @@
-// clang-format off
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
-// clang-format on
-
 #include <buffer.h>
+#include <graphicscontext.h>
 #include <iostream>
 #include <memory>
 #include <renderer.h>
 #include <shader.h>
 #include <vertexarray.h>
+#include <window.h>
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow* window);
+void framebuffer_size_callback(GLFWwindow* _w, int width, int height);
+void processInput(GLFWwindow* _w);
 
 unsigned int const SCR_WIDTH = 800, SCR_HEIGHT = 600;
 
 int main()
 {
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    std::shared_ptr<GraphicsContext> context = GraphicsContext::create();
+    std::unique_ptr<Window> window = Window::create(context, Window::Prop { "graphics", SCR_WIDTH, SCR_HEIGHT });
 
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "graphics", nullptr, nullptr);
-    glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cerr << "GLAD: Init failed\n";
-        return -1;
-    }
+    GLFWwindow* _w = (GLFWwindow*)window->get_native_handle();
+    //     glfwSetFramebufferSizeCallback(_w, framebuffer_size_callback);
 
     std::unique_ptr<Renderer> renderer = Renderer::create();
-
     std::shared_ptr<Shader> shader = Shader::create({ "test/vert.glsl", "test/frag.glsl" });
 
     float vertices[] = {
@@ -55,10 +44,10 @@ int main()
     vao->add_vertex_buffer(vbo);
     vao->set_index_buffer(ibo);
 
-//     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    while (!glfwWindowShouldClose(window)) {
-        processInput(window);
+    while (!glfwWindowShouldClose(_w)) {
+        processInput(_w);
 
         renderer->set_clear_color({ 0.2f, 0.3f, 0.3f, 1.0f });
         renderer->clear();
@@ -67,23 +56,22 @@ int main()
         shader->bind();
         renderer->draw_indexed(vao, index_count);
 
-        glfwSwapBuffers(window);
+        window->swap_buffers();
         glfwPollEvents();
     }
 
-    //     glfwTerminate();
     return 0;
 }
 
-void processInput(GLFWwindow* window)
+void processInput(GLFWwindow* _w)
 {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
+    if (glfwGetKey(_w, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(_w, true);
 }
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    // make sure the viewport matches the new window dimensions; note that width and
-    // height will be significantly larger than specified on retina displays.
-    glViewport(0, 0, width, height);
-}
+// void framebuffer_size_callback(GLFWwindow* _w, int width, int height)
+// {
+//     // make sure the viewport matches the new _w dimensions; note that width and
+//     // height will be significantly larger than specified on retina displays.
+//     glViewport(0, 0, width, height);
+// }

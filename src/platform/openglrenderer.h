@@ -7,8 +7,6 @@
 
 class OpenGLRenderer : public Renderer {
 public:
-    virtual void init() override;
-
     virtual void set_viewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) override;
     virtual void set_clear_color(glm::vec4 const& color) override;
     virtual void clear() override;
