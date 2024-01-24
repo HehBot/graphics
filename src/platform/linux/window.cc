@@ -1,8 +1,9 @@
-#include "linuxwindow.h"
+#include "window.h"
 
 #include <GLFW/glfw3.h>
 #include <event.h>
 #include <iostream>
+#include <util/scopedbind.h>
 
 static Button glfw_code_to_button(int code)
 {
@@ -25,8 +26,6 @@ LinuxWindow::LinuxWindow(std::shared_ptr<GraphicsContext> context, Window::Prop 
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
     window_handle = glfwCreateWindow(props.width, props.height, props.title.c_str(), nullptr, (GLFWwindow*)context->get_native_handle());
-    // TODO WHYYYYYYYYY
-    glfwMakeContextCurrent(window_handle);
 
     glfwSetWindowUserPointer(window_handle, (void*)&data);
     glfwSetWindowSizeCallback(window_handle, [](GLFWwindow* window, int width, int height) {
@@ -96,7 +95,17 @@ LinuxWindow::LinuxWindow(std::shared_ptr<GraphicsContext> context, Window::Prop 
 }
 LinuxWindow::~LinuxWindow()
 {
+    if (current == this)
+        current = nullptr;
     glfwDestroyWindow(window_handle);
+}
+
+void LinuxWindow::bind() const
+{
+    if (current != this) {
+        current = this;
+        glfwMakeContextCurrent(window_handle);
+    }
 }
 
 void LinuxWindow::on_update()
@@ -107,6 +116,7 @@ void LinuxWindow::on_update()
 
 void LinuxWindow::set_vsync(bool enable)
 {
+    ScopedBind<Window> scoped_bind(this);
     if (enable && !data.vsync) {
         glfwSwapInterval(1);
         data.vsync = true;

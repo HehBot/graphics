@@ -1,8 +1,9 @@
-#include "openglvertexarray.h"
+#include "glad/glad.h"
+#include "vertexarray.h"
 
 #include <cassert>
-#include <glad/glad.h>
 #include <memory>
+#include <util/scopedbind.h>
 
 static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
 {
@@ -42,17 +43,17 @@ OpenGLVertexArray::OpenGLVertexArray()
 
 OpenGLVertexArray::~OpenGLVertexArray()
 {
+    if (current == this)
+        current = nullptr;
     glDeleteVertexArrays(1, &id);
 }
 
 void OpenGLVertexArray::bind() const
 {
-    glBindVertexArray(id);
-}
-
-void OpenGLVertexArray::unbind() const
-{
-    glBindVertexArray(0);
+    if (current != this) {
+        current = this;
+        glBindVertexArray(id);
+    }
 }
 
 void OpenGLVertexArray::add_vertex_buffer(std::shared_ptr<VertexBuffer> const& vertex_buffer)
@@ -60,7 +61,7 @@ void OpenGLVertexArray::add_vertex_buffer(std::shared_ptr<VertexBuffer> const& v
     auto const& layout = vertex_buffer->get_layout();
     assert(layout.get_elements().size() != 0 && "Vertex Buffer had no layout!");
 
-    glBindVertexArray(id);
+    ScopedBind<VertexArray> scoped_bind(this);
     vertex_buffer->bind();
 
     for (auto const& element : layout) {

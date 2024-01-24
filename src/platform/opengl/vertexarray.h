@@ -1,5 +1,5 @@
-#ifndef OPENGLVERTEXARRAY_H
-#define OPENGLVERTEXARRAY_H
+#ifndef PLATFORM_OPENGL_VERTEXARRAY_H
+#define PLATFORM_OPENGL_VERTEXARRAY_H
 
 #include <memory>
 #include <vector>
@@ -11,7 +11,6 @@ public:
     virtual ~OpenGLVertexArray();
 
     virtual void bind() const override;
-    virtual void unbind() const override;
 
     virtual void add_vertex_buffer(std::shared_ptr<VertexBuffer> const& vertex_buffer) override;
     virtual void set_index_buffer(std::shared_ptr<IndexBuffer> const& index_buffer) override;
@@ -26,4 +25,4 @@ private:
     std::shared_ptr<IndexBuffer> index_buffer;
 };
 
-#endif // OPENGLVERTEXARRAY_H
+#endif // PLATFORM_OPENGL_VERTEXARRAY_H

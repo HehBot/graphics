@@ -1,6 +1,6 @@
 #include <buffer.h>
 #include <memory>
-#include <platform/openglbuffer.h>
+#include <platform/opengl/buffer.h>
 #include <renderer.h>
 
 std::shared_ptr<VertexBuffer> VertexBuffer::create(uint32_t size)

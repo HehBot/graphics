@@ -1,15 +1,14 @@
 #type fragment
 #version 460 core
 
-out vec4 FragColor;
+in vec2 tex_coord;
+out vec4 color;
 
-in vec3 ourColor;
-in vec2 TexCoord;
-
-uniform sampler2D texture1;
-uniform sampler2D texture2;
+uniform sampler2D text;
+uniform vec3 text_color;
 
 void main()
 {
-    FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.5) * vec4(ourColor, 1.0);
+    vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, tex_coord).r);
+    color = vec4(text_color, 1.0) * sampled;
 }

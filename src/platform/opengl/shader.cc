@@ -1,7 +1,7 @@
-#include "openglshader.h"
+#include "shader.h"
+#include "glad/glad.h"
 
 #include <fstream>
-#include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <sstream>
@@ -90,51 +90,6 @@ OpenGLShader::OpenGLShader(std::initializer_list<std::string> shaderpaths)
 
     load_uniform_locs();
 }
-
-OpenGLShader::~OpenGLShader()
-{
-    glDeleteProgram(id);
-}
-
-void OpenGLShader::bind() const
-{
-    glUseProgram(id);
-}
-
-void OpenGLShader::unbind() const
-{
-    glUseProgram(0);
-}
-
-void OpenGLShader::set_int(std::string const& name, int value)
-{
-    glUniform1i(uniform_loc(name), value);
-}
-void OpenGLShader::set_int_array(std::string const& name, int* values, uint32_t count)
-{
-    glUniform1iv(uniform_loc(name), count, values);
-}
-void OpenGLShader::set_float(std::string const& name, float value)
-{
-    glUniform1f(uniform_loc(name), value);
-}
-void OpenGLShader::set_float2(std::string const& name, glm::vec2 const& value)
-{
-    glUniform2f(uniform_loc(name), value.x, value.y);
-}
-void OpenGLShader::set_float3(std::string const& name, glm::vec3 const& value)
-{
-    glUniform3f(uniform_loc(name), value.x, value.y, value.z);
-}
-void OpenGLShader::set_float4(std::string const& name, glm::vec4 const& value)
-{
-    glUniform4f(uniform_loc(name), value.x, value.y, value.z, value.w);
-}
-void OpenGLShader::set_mat4(std::string const& name, glm::mat4 const& mat)
-{
-    glUniformMatrix4fv(uniform_loc(name), 1, GL_FALSE, glm::value_ptr(mat));
-}
-
 void OpenGLShader::load_uniform_locs()
 {
     int count, bufSize;
@@ -150,6 +105,57 @@ void OpenGLShader::load_uniform_locs()
     }
 
     delete[] name;
+}
+
+OpenGLShader::~OpenGLShader()
+{
+    if (current == this)
+        current = nullptr;
+    glDeleteProgram(id);
+}
+
+void OpenGLShader::bind() const
+{
+    if (current != this) {
+        current = this;
+        glUseProgram(id);
+    }
+}
+
+void OpenGLShader::set_int(std::string const& name, int value)
+{
+    ScopedBind<Shader> scoped_bind(this);
+    glUniform1i(uniform_loc(name), value);
+}
+void OpenGLShader::set_int_array(std::string const& name, int* values, uint32_t count)
+{
+    ScopedBind<Shader> scoped_bind(this);
+    glUniform1iv(uniform_loc(name), count, values);
+}
+void OpenGLShader::set_float(std::string const& name, float value)
+{
+    ScopedBind<Shader> scoped_bind(this);
+    glUniform1f(uniform_loc(name), value);
+}
+void OpenGLShader::set_float2(std::string const& name, glm::vec2 const& value)
+{
+    ScopedBind<Shader> scoped_bind(this);
+    glUniform2f(uniform_loc(name), value.x, value.y);
+}
+void OpenGLShader::set_float3(std::string const& name, glm::vec3 const& value)
+{
+    ScopedBind<Shader> scoped_bind(this);
+    glUniform3f(uniform_loc(name), value.x, value.y, value.z);
+}
+void OpenGLShader::set_float4(std::string const& name, glm::vec4 const& value)
+{
+    ScopedBind<Shader> scoped_bind(this);
+    glUniform4f(uniform_loc(name), value.x, value.y, value.z, value.w);
+}
+void OpenGLShader::set_mat4(std::string const& name, glm::mat4 const& mat)
+{
+    ScopedBind<Shader> scoped_bind(this);
+    glUniformMatrix4fv(uniform_loc(name), 1, GL_FALSE, glm::value_ptr(mat));
 }
 
 uint32_t OpenGLShader::uniform_loc(std::string const& name) const

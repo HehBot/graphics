@@ -1,17 +1,16 @@
-#include <graphicscontext.h>
-#include <platform/openglgraphicscontext.h>
+#include "graphicscontext.h"
 
 // clang-format off
-#include <glad/glad.h>
+#include "../opengl/glad/glad.h"
 #include <GLFW/glfw3.h>
 // clang-format on
 
 #include <cassert>
 #include <iostream>
 
-size_t OpenGLGraphicsContext::nr_contexts = 0;
+size_t LinuxGraphicsContext::nr_contexts = 0;
 
-OpenGLGraphicsContext::OpenGLGraphicsContext()
+LinuxGraphicsContext::LinuxGraphicsContext()
 {
     if (nr_contexts == 0)
         glfwInit();
@@ -22,7 +21,7 @@ OpenGLGraphicsContext::OpenGLGraphicsContext()
     glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
     context_handle = glfwCreateWindow(1, 1, "", nullptr, nullptr);
 
-    make_current();
+    bind();
 
     if (nr_contexts == 0) {
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -34,7 +33,7 @@ OpenGLGraphicsContext::OpenGLGraphicsContext()
     nr_contexts++;
 }
 
-OpenGLGraphicsContext::~OpenGLGraphicsContext()
+LinuxGraphicsContext::~LinuxGraphicsContext()
 {
     nr_contexts--;
 
@@ -44,7 +43,7 @@ OpenGLGraphicsContext::~OpenGLGraphicsContext()
         glfwDestroyWindow(context_handle);
 }
 
-void OpenGLGraphicsContext::make_current()
+void LinuxGraphicsContext::bind() const
 {
     glfwMakeContextCurrent(context_handle);
 }

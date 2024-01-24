@@ -1,11 +1,13 @@
-#include "opengltexture.h"
+#include "texture.h"
 
 #include <cassert>
-#include <glad/glad.h>
+#include "glad/glad.h"
 
 static GLenum image_format_to_gl_internal_format(ImageFormat format)
 {
     switch (format) {
+    case ImageFormat::R8:
+        return GL_R8;
     case ImageFormat::RGB8:
         return GL_RGB8;
     case ImageFormat::RGBA8:
@@ -18,6 +20,8 @@ static GLenum image_format_to_gl_internal_format(ImageFormat format)
 static GLenum image_format_to_gl_data_format(ImageFormat format)
 {
     switch (format) {
+    case ImageFormat::R8:
+        return GL_RED;
     case ImageFormat::RGB8:
         return GL_RGB;
     case ImageFormat::RGBA8:
@@ -49,12 +53,26 @@ OpenGLTexture2D::~OpenGLTexture2D()
 
 void OpenGLTexture2D::set_data(void* data, uint32_t size)
 {
-    uint32_t bpp = (data_format == GL_RGBA ? 4 : 3);
+    uint32_t bpp;
+    switch (data_format) {
+    case GL_RGBA:
+        bpp = 4;
+        break;
+    case GL_RGB:
+        bpp = 3;
+        break;
+    case GL_RED:
+        bpp = 1;
+        break;
+    default:
+        assert(false);
+    }
+
     assert(size == width * height * bpp && "Data must be entire texture!");
     glTextureSubImage2D(id, 0, 0, 0, width, height, data_format, GL_UNSIGNED_BYTE, data);
 }
 
-void OpenGLTexture2D::bind(uint32_t slot) const
+void OpenGLTexture2D::bind_to_slot(uint32_t slot) const
 {
     glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(GL_TEXTURE_2D, id);

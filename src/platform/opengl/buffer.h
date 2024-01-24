@@ -1,5 +1,5 @@
-#ifndef OPENGLBUFFER_H
-#define OPENGLBUFFER_H
+#ifndef PLATFORM_OPENGL_BUFFER_H
+#define PLATFORM_OPENGL_BUFFER_H
 
 #include <buffer.h>
 
@@ -10,8 +10,6 @@ public:
     virtual ~OpenGLVertexBuffer();
 
     virtual void bind() const override;
-    virtual void unbind() const override;
-
     virtual void set_data(void const* data, uint32_t size) override;
 
     virtual BufferLayout const& get_layout() const override { return layout; }
@@ -28,7 +26,6 @@ public:
     virtual ~OpenGLIndexBuffer();
 
     virtual void bind() const override;
-    virtual void unbind() const override;
 
     virtual uint32_t get_count() const override { return count; }
 
@@ -37,4 +34,4 @@ private:
     uint32_t count;
 };
 
-#endif // OPENGLBUFFER_H
+#endif // PLATFORM_OPENGL_BUFFER_H

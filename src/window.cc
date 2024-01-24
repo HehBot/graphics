@@ -1,5 +1,7 @@
 #include <memory>
-#include <platform/linuxwindow.h>
+#include <platform/linux/window.h>
+
+Window const* Window::current = nullptr;
 
 class GraphicsContext;
 

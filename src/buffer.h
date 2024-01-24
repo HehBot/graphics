@@ -128,8 +128,6 @@ public:
     virtual ~VertexBuffer() = default;
 
     virtual void bind() const = 0;
-    virtual void unbind() const = 0;
-
     virtual void set_data(void const* data, uint32_t size) = 0;
 
     virtual BufferLayout const& get_layout() const = 0;
@@ -144,7 +142,6 @@ public:
     virtual ~IndexBuffer() = default;
 
     virtual void bind() const = 0;
-    virtual void unbind() const = 0;
 
     virtual uint32_t get_count() const = 0;
 

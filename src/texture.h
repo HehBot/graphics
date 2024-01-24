@@ -25,7 +25,7 @@ public:
     virtual uint32_t get_height() const = 0;
 
     virtual void set_data(void* data, uint32_t size) = 0;
-    virtual void bind(uint32_t slot) const = 0;
+    virtual void bind_to_slot(uint32_t slot) const = 0;
 };
 
 class Texture2D : public Texture {

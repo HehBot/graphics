@@ -23,12 +23,12 @@ TEST_SRCS := $(shell find $(TEST_DIR) -name '*.cc' -or -name '*.c')
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 TEST_OBJS := $(TEST_SRCS:%=$(BUILD_DIR)/%.o)
 
-DEPS := $(OBJS:.o=.d) $(MAIN_OBJ:.o=.d)
+DEPS := $(OBJS:.o=.d) $(TEST_OBJS:.o=.d)
 
-CXX_FLAGS := -Wall -Wpedantic -Werror -g -fPIC -I$(SRC_DIR) -I/usr/include/freetype2 -MMD -MP
-CC_FLAGS := -fPIC -I$(SRC_DIR) -MMD -MP
+CXX_FLAGS := -Wall -Wpedantic -Werror -g -O3 -fPIC -I$(SRC_DIR) -I/usr/include/freetype2 -MMD -MP
+CC_FLAGS := -O3 -fPIC -I$(SRC_DIR) -MMD -MP
 LD_FLAGS := -L$(LIB_DIR)
-LIB_FLAGS :=  -lGL -lGLU -lglfw -lX11 -lpthread -ldl -lfreetype
+LIB_FLAGS :=  -lglfw -lGL -lX11 -lfreetype
 
 $(BIN_DIR)/$(TARGET_EXEC): $(LIB_DIR)/$(TARGET_STATIC_LIB) $(TEST_OBJS)
 	@mkdir -p $(dir $@)

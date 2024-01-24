@@ -1,6 +1,6 @@
 #include <cassert>
 #include <memory>
-#include <platform/opengltexture.h>
+#include <platform/opengl/texture.h>
 #include <renderer.h>
 #include <texture.h>
 

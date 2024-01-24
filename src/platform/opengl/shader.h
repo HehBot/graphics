@@ -1,5 +1,5 @@
-#ifndef OPENGLSHADER_H
-#define OPENGLSHADER_H
+#ifndef PLATFORM_OPENGL_SHADER_H
+#define PLATFORM_OPENGL_SHADER_H
 
 #include <glm/glm.hpp>
 #include <shader.h>
@@ -11,7 +11,6 @@ public:
     virtual ~OpenGLShader();
 
     virtual void bind() const override;
-    virtual void unbind() const override;
 
     virtual void set_int(std::string const& name, int value) override;
     virtual void set_int_array(std::string const& name, int* values, uint32_t count) override;
@@ -31,4 +30,4 @@ private:
     std::unordered_map<std::string, uint32_t> uniforms;
 };
 
-#endif // OPENGLSHADER_H
+#endif // PLATFORM_OPENGL_SHADER_H

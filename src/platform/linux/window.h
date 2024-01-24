@@ -1,5 +1,5 @@
-#ifndef LINUXWINDOW_H
-#define LINUXWINDOW_H
+#ifndef PLATFORM_LINUX_WINDOW_H
+#define PLATFORM_LINUX_WINDOW_H
 
 #include <cstdint>
 #include <graphicscontext.h>
@@ -14,10 +14,12 @@ public:
 
     virtual void set_event_callback(std::function<void(Event&)> const& callback) override { data.event_callback = callback; }
 
+    virtual void bind() const;
+
     virtual void on_update();
 
     virtual uint32_t get_width() const override { return data.width; }
-    virtual uint32_t get_heigth() const override { return data.height; }
+    virtual uint32_t get_height() const override { return data.height; }
 
     virtual void set_vsync(bool enable) override;
     virtual bool is_vsync() const override { return data.vsync; }
@@ -36,4 +38,4 @@ private:
     } data;
 };
 
-#endif // LINUXWINDOW_H
+#endif // PLATFORM_LINUX_WINDOW_H

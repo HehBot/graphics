@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <memory>
 #include <vertexarray.h>
+#include <window.h>
 
 class Renderer {
 public:
@@ -21,7 +22,7 @@ public:
     virtual void draw_lines(std::shared_ptr<VertexArray> vertex_array, uint32_t vertex_count) = 0;
 
     static API get_api() { return api; }
-    static std::unique_ptr<Renderer> create();
+    static std::unique_ptr<Renderer> create(Window const* window);
 
 private:
     static API api;

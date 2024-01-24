@@ -1,7 +1,9 @@
 #include <memory>
-#include <platform/openglvertexarray.h>
+#include <platform/opengl/vertexarray.h>
 #include <renderer.h>
 #include <vertexarray.h>
+
+VertexArray const* VertexArray::current = nullptr;
 
 std::shared_ptr<VertexArray> VertexArray::create()
 {
