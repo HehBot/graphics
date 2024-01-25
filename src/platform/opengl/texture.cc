@@ -1,7 +1,9 @@
+#include "glad/glad.h"
 #include "texture.h"
 
 #include <cassert>
-#include "glad/glad.h"
+
+using namespace graphics;
 
 static GLenum image_format_to_gl_internal_format(ImageFormat format)
 {

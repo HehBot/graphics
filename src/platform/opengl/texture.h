@@ -5,9 +5,9 @@
 
 #include <texture.h>
 
-class OpenGLTexture2D : public Texture2D {
+class OpenGLTexture2D : public graphics::Texture2D {
 public:
-    OpenGLTexture2D(Texture::Spec const& spec);
+    OpenGLTexture2D(graphics::Texture::Spec const& spec);
     virtual ~OpenGLTexture2D();
 
     virtual uint32_t get_width() const override { return width; }

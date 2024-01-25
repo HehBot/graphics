@@ -5,7 +5,7 @@
 #include <shader.h>
 #include <unordered_map>
 
-class OpenGLShader : public Shader {
+class OpenGLShader : public graphics::Shader {
 public:
     OpenGLShader(std::initializer_list<std::string> shaderpaths);
     virtual ~OpenGLShader();

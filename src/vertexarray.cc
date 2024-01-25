@@ -3,6 +3,8 @@
 #include <renderer.h>
 #include <vertexarray.h>
 
+using namespace graphics;
+
 VertexArray const* VertexArray::current = nullptr;
 
 std::shared_ptr<VertexArray> VertexArray::create()

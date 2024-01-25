@@ -3,6 +3,8 @@
 #include <renderer.h>
 #include <shader.h>
 
+using namespace graphics;
+
 Shader const* Shader::current = nullptr;
 
 std::shared_ptr<Shader> Shader::create(std::initializer_list<std::string> shaderpaths)

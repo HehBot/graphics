@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+namespace graphics {
 enum class ShaderDataType {
     Float,
     Float2,
@@ -147,5 +148,6 @@ public:
 
     static std::shared_ptr<IndexBuffer> create(uint32_t* indices, uint32_t count);
 };
+}
 
 #endif // BUFFER_H

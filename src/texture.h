@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 
+namespace graphics {
 enum class ImageFormat {
     R8,
     RGB8,
@@ -32,5 +33,6 @@ class Texture2D : public Texture {
 public:
     static std::shared_ptr<Texture2D> create(Texture::Spec const& spec);
 };
+}
 
 #endif // TEXTURE_H

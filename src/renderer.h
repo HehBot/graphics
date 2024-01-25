@@ -6,6 +6,7 @@
 #include <vertexarray.h>
 #include <window.h>
 
+namespace graphics {
 class Renderer {
 public:
     enum class API {
@@ -27,5 +28,6 @@ public:
 private:
     static API api;
 };
+}
 
 #endif // RENDERER_H

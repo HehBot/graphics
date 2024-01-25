@@ -5,6 +5,7 @@
 #include <memory>
 #include <util/scopedbind.h>
 
+namespace graphics {
 class VertexArray {
 public:
     virtual ~VertexArray() = default;
@@ -23,5 +24,6 @@ protected:
     static VertexArray const* current;
     friend class ScopedBind<VertexArray>;
 };
+}
 
 #endif // VERTEXARRAY_H

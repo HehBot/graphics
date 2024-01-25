@@ -1,6 +1,7 @@
 #ifndef EVENT_H
 #define EVENT_H
 
+namespace graphics {
 enum class EventType {
     WindowClose,
     WindowResize,
@@ -281,5 +282,6 @@ public:
 
     EVENT_TYPE(MouseButtonReleased)
 };
+}
 
 #endif // EVENT_H

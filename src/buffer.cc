@@ -3,6 +3,8 @@
 #include <platform/opengl/buffer.h>
 #include <renderer.h>
 
+using namespace graphics;
+
 std::shared_ptr<VertexBuffer> VertexBuffer::create(uint32_t size)
 {
     switch (Renderer::get_api()) {

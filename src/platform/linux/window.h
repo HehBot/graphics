@@ -1,18 +1,18 @@
 #ifndef PLATFORM_LINUX_WINDOW_H
 #define PLATFORM_LINUX_WINDOW_H
 
+#include <context.h>
 #include <cstdint>
-#include <graphicscontext.h>
 #include <window.h>
 
 struct GLFWwindow;
 
-class LinuxWindow : public Window {
+class LinuxWindow : public graphics::Window {
 public:
-    LinuxWindow(std::shared_ptr<GraphicsContext> context, Window::Prop const& props);
+    LinuxWindow(std::shared_ptr<graphics::Context> context, graphics::Window::Prop const& props);
     virtual ~LinuxWindow();
 
-    virtual void set_event_callback(std::function<void(Event&)> const& callback) override { data.event_callback = callback; }
+    virtual void set_event_callback(std::function<void(graphics::Event&)> const& callback) override { data.event_callback = callback; }
 
     virtual void bind() const;
 
@@ -27,14 +27,14 @@ public:
     virtual void* get_native_handle() const override { return (void*)window_handle; }
 
 private:
-    std::shared_ptr<GraphicsContext> context;
+    std::shared_ptr<graphics::Context> context;
     GLFWwindow* window_handle;
 
     struct Data {
         std::string title;
         uint32_t width, height;
         bool vsync;
-        EventCallbackFn event_callback;
+        std::function<void(graphics::Event&)> event_callback;
     } data;
 };
 

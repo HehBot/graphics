@@ -1,6 +1,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+#include <context.h>
 #include <cstdint>
 #include <event.h>
 #include <functional>
@@ -8,10 +9,7 @@
 #include <string>
 #include <util/scopedbind.h>
 
-class GraphicsContext;
-
-using EventCallbackFn = std::function<void(Event&)>;
-
+namespace graphics {
 class Window {
 public:
     struct Prop {
@@ -22,7 +20,7 @@ public:
 
     virtual ~Window() = default;
 
-    virtual void set_event_callback(EventCallbackFn const& callback) = 0;
+    virtual void set_event_callback(std::function<void(Event&)> const& callback) = 0;
 
     virtual void bind() const = 0;
 
@@ -36,11 +34,12 @@ public:
 
     virtual void* get_native_handle() const = 0;
 
-    static std::unique_ptr<Window> create(std::shared_ptr<GraphicsContext> context, Window::Prop const& props = { "graphics", 800, 600 });
+    static std::unique_ptr<Window> create(std::shared_ptr<Context> context, Window::Prop const& props = { "graphics", 800, 600 });
 
 protected:
     static Window const* current;
     friend class ScopedBind<Window>;
 };
+}
 
 #endif // WINDOW_H

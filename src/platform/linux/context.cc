@@ -1,4 +1,4 @@
-#include "graphicscontext.h"
+#include "context.h"
 
 // clang-format off
 #include "../opengl/glad/glad.h"
@@ -8,9 +8,11 @@
 #include <cassert>
 #include <iostream>
 
-size_t LinuxGraphicsContext::nr_contexts = 0;
+using namespace graphics;
 
-LinuxGraphicsContext::LinuxGraphicsContext()
+size_t LinuxContext::nr_contexts = 0;
+
+LinuxContext::LinuxContext()
 {
     if (nr_contexts == 0)
         glfwInit();
@@ -33,7 +35,7 @@ LinuxGraphicsContext::LinuxGraphicsContext()
     nr_contexts++;
 }
 
-LinuxGraphicsContext::~LinuxGraphicsContext()
+LinuxContext::~LinuxContext()
 {
     nr_contexts--;
 
@@ -43,7 +45,7 @@ LinuxGraphicsContext::~LinuxGraphicsContext()
         glfwDestroyWindow(context_handle);
 }
 
-void LinuxGraphicsContext::bind() const
+void LinuxContext::bind() const
 {
     glfwMakeContextCurrent(context_handle);
 }

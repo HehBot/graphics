@@ -6,6 +6,7 @@
 #include <string>
 #include <util/scopedbind.h>
 
+namespace graphics {
 class Shader {
 public:
     virtual ~Shader() = default;
@@ -27,5 +28,6 @@ protected:
     static Shader const* current;
     friend class ScopedBind<Shader>;
 };
+}
 
 #endif // SHADER_H

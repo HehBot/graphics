@@ -5,6 +5,8 @@
 #include <iostream>
 #include <util/scopedbind.h>
 
+using namespace graphics;
+
 static Button glfw_code_to_button(int code)
 {
     static Button b[] = { Button::Left, Button::Right, Button::Middle, Button::B3, Button::B4, Button::B5, Button::B6, Button::Last };
@@ -18,7 +20,7 @@ static Key glfw_code_to_key(int code)
         return Key::Unknown;
 }
 
-LinuxWindow::LinuxWindow(std::shared_ptr<GraphicsContext> context, Window::Prop const& props)
+LinuxWindow::LinuxWindow(std::shared_ptr<Context> context, Window::Prop const& props)
     : context(context), data { props.title, props.width, props.height, true, [](Event&) {} }
 {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);

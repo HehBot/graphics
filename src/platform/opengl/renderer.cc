@@ -1,10 +1,12 @@
-#include "renderer.h"
 #include "glad/glad.h"
+#include "renderer.h"
 
 #include <iostream>
 #include <memory>
 #include <util/scopedbind.h>
 #include <vertexarray.h>
+
+using namespace graphics;
 
 OpenGLRenderer::OpenGLRenderer(Window const* window)
     : window(window)

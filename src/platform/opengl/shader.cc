@@ -1,5 +1,5 @@
-#include "shader.h"
 #include "glad/glad.h"
+#include "shader.h"
 
 #include <fstream>
 #include <glm/gtc/type_ptr.hpp>
@@ -7,6 +7,8 @@
 #include <sstream>
 #include <unordered_map>
 #include <vector>
+
+using namespace graphics;
 
 static GLenum shader_type_from_string(std::string const& type_str)
 {

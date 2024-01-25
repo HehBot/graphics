@@ -1,9 +1,9 @@
 #include <buffer.h>
+#include <context.h>
 #include <event.h>
 #include <ft2build.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <graphicscontext.h>
 #include <iostream>
 #include <memory>
 #include <renderer.h>
@@ -12,6 +12,8 @@
 #include <vertexarray.h>
 #include <window.h>
 #include FT_FREETYPE_H
+
+using namespace graphics;
 
 std::shared_ptr<Texture> ft_load_glyph(char const* path, char x, glm::ivec2& size, glm::ivec2& bearing)
 {
@@ -63,7 +65,7 @@ static void callback(Event& event)
 
 int main()
 {
-    std::shared_ptr<GraphicsContext> context = GraphicsContext::create();
+    std::shared_ptr<Context> context = Context::create();
 
     std::unique_ptr<Window> window = Window::create(context, Window::Prop { "graphics", 1000, 1000 });
     window->set_event_callback(&callback);

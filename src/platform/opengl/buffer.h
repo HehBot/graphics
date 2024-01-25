@@ -3,7 +3,7 @@
 
 #include <buffer.h>
 
-class OpenGLVertexBuffer : public VertexBuffer {
+class OpenGLVertexBuffer : public graphics::VertexBuffer {
 public:
     OpenGLVertexBuffer(uint32_t size);
     OpenGLVertexBuffer(float* vertices, uint32_t size);
@@ -12,15 +12,15 @@ public:
     virtual void bind() const override;
     virtual void set_data(void const* data, uint32_t size) override;
 
-    virtual BufferLayout const& get_layout() const override { return layout; }
-    virtual void set_layout(BufferLayout const& layout) override { this->layout = layout; }
+    virtual graphics::BufferLayout const& get_layout() const override { return layout; }
+    virtual void set_layout(graphics::BufferLayout const& layout) override { this->layout = layout; }
 
 private:
     uint32_t id;
-    BufferLayout layout;
+    graphics::BufferLayout layout;
 };
 
-class OpenGLIndexBuffer : public IndexBuffer {
+class OpenGLIndexBuffer : public graphics::IndexBuffer {
 public:
     OpenGLIndexBuffer(uint32_t* indices, uint32_t count);
     virtual ~OpenGLIndexBuffer();

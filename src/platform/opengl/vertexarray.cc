@@ -5,6 +5,8 @@
 #include <memory>
 #include <util/scopedbind.h>
 
+using namespace graphics;
+
 static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
 {
     switch (type) {

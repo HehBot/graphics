@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+using namespace graphics;
+
 OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size)
 {
     glCreateBuffers(1, &id);

@@ -4,6 +4,8 @@
 #include <renderer.h>
 #include <texture.h>
 
+using namespace graphics;
+
 std::shared_ptr<Texture2D> Texture2D::create(Texture::Spec const& spec)
 {
     switch (Renderer::get_api()) {

@@ -3,6 +3,8 @@
 #include <renderer.h>
 #include <window.h>
 
+using namespace graphics;
+
 Renderer::API Renderer::api = Renderer::API::OpenGL;
 
 std::unique_ptr<Renderer> Renderer::create(Window const* window)
