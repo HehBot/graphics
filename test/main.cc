@@ -43,35 +43,38 @@ std::shared_ptr<Texture> ft_load_glyph(char const* path, char x, glm::ivec2& siz
     return tex;
 }
 
-static bool window_should_close = false;
-
-static void callback(Event& event)
-{
-    event.handled = true;
-    switch (event.get_type()) {
-    case EventType::WindowClose:
-        window_should_close = true;
-        break;
-    case EventType::KeyPressed: {
-        KeyPressedEvent& e = dynamic_cast<KeyPressedEvent&>(event);
-        if (e.get_key() == Key::Escape)
-            window_should_close = true;
-        break;
-    }
-    default:
-        event.handled = false;
-    }
-};
-
 int main()
 {
     std::shared_ptr<Context> context = Context::create();
 
     std::unique_ptr<Window> window = Window::create(context, Window::Prop { "graphics", 1000, 1000 });
-    window->set_event_callback(&callback);
     window->bind();
 
-    std::unique_ptr<Renderer> renderer = Renderer::create(window.get());
+    std::unique_ptr<Renderer> renderer = Renderer::create(window.get(), { Renderer::Option::DepthTest, Renderer::Option::CullFace });
+
+    bool window_should_close = false;
+    std::function<void(Event&)> callback = [&window_should_close, &renderer](Event& event) {
+        event.handled = true;
+        switch (event.get_type()) {
+        case EventType::WindowClose:
+            window_should_close = true;
+            break;
+        case EventType::KeyPressed: {
+            KeyPressedEvent& e = dynamic_cast<KeyPressedEvent&>(event);
+            if (e.get_key() == Key::ESCAPE)
+                window_should_close = true;
+            break;
+        }
+        case EventType::WindowResize: {
+            WindowResizeEvent& e = dynamic_cast<WindowResizeEvent&>(event);
+            renderer->set_viewport(0, 0, e.get_width(), e.get_height());
+            break;
+        }
+        default:
+            event.handled = false;
+        }
+    };
+    window->set_event_callback(callback);
 
     std::shared_ptr<Shader> shader = Shader::create({ "test/vert.glsl", "test/frag.glsl" });
     shader->bind();
