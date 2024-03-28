@@ -224,6 +224,7 @@ LinuxWindow::LinuxWindow(std::shared_ptr<Context> context, Window::Prop const& p
         MouseMovedEvent event((float)x, (float)y);
         data.event_callback(event);
     });
+    glfwSwapInterval(1);
 }
 LinuxWindow::~LinuxWindow()
 {
@@ -256,4 +257,19 @@ void LinuxWindow::set_vsync(bool enable)
         glfwSwapInterval(0);
         data.vsync = false;
     }
+}
+
+double LinuxWindow::get_time() const
+{
+    return glfwGetTime();
+}
+void LinuxWindow::init_delta_timer()
+{
+    last_delta_point = glfwGetTime();
+}
+double LinuxWindow::get_delta_time()
+{
+    double t = last_delta_point;
+    last_delta_point = glfwGetTime();
+    return (last_delta_point - t);
 }

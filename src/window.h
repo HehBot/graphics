@@ -34,6 +34,10 @@ public:
 
     virtual void* get_native_handle() const = 0;
 
+    virtual double get_time() const = 0;
+    virtual void init_delta_timer() = 0;
+    virtual double get_delta_time() = 0;
+
     static std::unique_ptr<Window> create(std::shared_ptr<Context> context, Window::Prop const& props = { "graphics", 800, 600 });
 
 protected:

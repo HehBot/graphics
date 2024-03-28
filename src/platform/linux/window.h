@@ -23,9 +23,14 @@ public:
 
     virtual void* get_native_handle() const override { return (void*)window_handle; }
 
+    virtual double get_time() const override;
+    virtual void init_delta_timer() override;
+    virtual double get_delta_time() override;
+
 private:
     std::shared_ptr<graphics::Context> context;
     GLFWwindow* window_handle;
+    double last_delta_point;
 
     struct Data {
         std::string title;
