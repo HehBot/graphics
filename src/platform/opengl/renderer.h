@@ -14,12 +14,17 @@ public:
     virtual void set_clear_color(glm::vec4 const& color) override;
     virtual void clear() override;
 
+    virtual void enable_point_mode() override;
+    virtual void enable_line_mode() override;
+    virtual void enable_fill_mode() override;
+
     virtual void draw_indexed(std::shared_ptr<graphics::VertexArray> vertex_array, uint32_t indexCount) override;
     virtual void draw_lines(std::shared_ptr<graphics::VertexArray> vertex_array, uint32_t vertex_count) override;
     virtual void draw_triangles(std::shared_ptr<graphics::VertexArray> vertex_array, uint32_t vertex_count) override;
 
 private:
     graphics::Window const* window;
+    int mode;
 };
 
 #endif // PLATFORM_OPENGL_RENDERER_H

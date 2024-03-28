@@ -11,7 +11,7 @@
 using namespace graphics;
 
 OpenGLRenderer::OpenGLRenderer(Window const* window, std::initializer_list<Renderer::Option> opt)
-    : window(window)
+    : window(window), mode(2)
 {
     ScopedBind<Window> scoped_bind(window);
     static std::unordered_map<Renderer::Option, int> const convert = {
@@ -32,6 +32,7 @@ OpenGLRenderer::OpenGLRenderer(Window const* window, std::initializer_list<Rende
     }
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void OpenGLRenderer::set_viewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
@@ -48,6 +49,27 @@ void OpenGLRenderer::clear()
 {
     ScopedBind<Window> scoped_bind(window);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+void OpenGLRenderer::enable_point_mode()
+{
+    if (mode != 0) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+        mode = 0;
+    }
+}
+void OpenGLRenderer::enable_line_mode()
+{
+    if (mode != 1) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        mode = 1;
+    }
+}
+void OpenGLRenderer::enable_fill_mode()
+{
+    if (mode != 2) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        mode = 2;
+    }
 }
 
 void OpenGLRenderer::draw_indexed(std::shared_ptr<VertexArray> vertex_array, uint32_t index_count)

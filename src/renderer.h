@@ -24,6 +24,10 @@ public:
     virtual void set_clear_color(glm::vec4 const& color) = 0;
     virtual void clear() = 0;
 
+    virtual void enable_point_mode() = 0;
+    virtual void enable_line_mode() = 0;
+    virtual void enable_fill_mode() = 0;
+
     virtual void draw_indexed(std::shared_ptr<VertexArray> vertex_array, uint32_t indexCount) = 0;
     virtual void draw_lines(std::shared_ptr<VertexArray> vertex_array, uint32_t vertex_count) = 0;
     virtual void draw_triangles(std::shared_ptr<VertexArray> vertex_array, uint32_t vertex_count) = 0;
