@@ -30,8 +30,11 @@ public:
 };
 
 class Texture2D : public Texture {
+    static bool stbi_inited;
+
 public:
     static std::shared_ptr<Texture2D> create(Texture::Spec const& spec);
+    static std::shared_ptr<Texture2D> create(char const* path);
 };
 }
 
