@@ -26,8 +26,8 @@ public:
 
     virtual void on_update() = 0;
 
-    virtual uint32_t get_width() const = 0;
-    virtual uint32_t get_height() const = 0;
+    uint32_t const& width;
+    uint32_t const& height;
 
     virtual void set_vsync(bool enabled) = 0;
     virtual bool is_vsync() const = 0;
@@ -38,6 +38,8 @@ public:
 
 protected:
     static Window const* current;
+    Window(uint32_t const& w, uint32_t const& h)
+        : width(w), height(h) { }
     friend class ScopedBind<Window>;
 };
 }

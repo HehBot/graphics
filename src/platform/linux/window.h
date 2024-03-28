@@ -18,9 +18,6 @@ public:
 
     virtual void on_update();
 
-    virtual uint32_t get_width() const override { return data.width; }
-    virtual uint32_t get_height() const override { return data.height; }
-
     virtual void set_vsync(bool enable) override;
     virtual bool is_vsync() const override { return data.vsync; }
 

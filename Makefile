@@ -19,7 +19,7 @@ OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 
 DEPS := $(OBJS:.o=.d)
 
-CXX_FLAGS := -Wall -Wpedantic -Werror -g -O3 -fPIC -I$(SRC_DIR) -I/usr/include/freetype2 -MMD -MP
+CXX_FLAGS := -Wall -Wpedantic -Werror -g -O3 -fPIC -I$(SRC_DIR) -MMD -MP
 CC_FLAGS := -O3 -fPIC -I$(SRC_DIR) -MMD -MP
 LD_FLAGS := -L$(LIB_DIR)
 LIB_FLAGS :=  -lglfw -lGL -lX11 -lfreetype

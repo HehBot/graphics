@@ -112,7 +112,7 @@ int main()
     vao->add_vertex_buffer(vbo);
     vao->set_index_buffer(ibo);
 
-    glm::mat4 projection = glm::ortho(0.0f, (float)window->get_width(), 0.0f, (float)window->get_height());
+    glm::mat4 projection = glm::ortho(0.0f, (float)window->width, 0.0f, (float)window->height);
     shader->set_mat4("projection", projection);
     shader->set_float3("text_color", text_color);
 

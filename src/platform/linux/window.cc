@@ -151,7 +151,7 @@ static Key glfw_code_to_key(int code)
 }
 
 LinuxWindow::LinuxWindow(std::shared_ptr<Context> context, Window::Prop const& props)
-    : context(context), data { props.title, props.width, props.height, true, [](Event&) {} }
+    : Window(data.width, data.height), context(context), data { props.title, props.width, props.height, true, [](Event&) {} }
 {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -160,12 +160,12 @@ LinuxWindow::LinuxWindow(std::shared_ptr<Context> context, Window::Prop const& p
     window_handle = glfwCreateWindow(props.width, props.height, props.title.c_str(), nullptr, (GLFWwindow*)context->get_native_handle());
 
     glfwSetWindowUserPointer(window_handle, (void*)&data);
-    glfwSetWindowSizeCallback(window_handle, [](GLFWwindow* window, int width, int height) {
+    glfwSetWindowSizeCallback(window_handle, [](GLFWwindow* window, int w, int h) {
         Data& data = *(Data*)glfwGetWindowUserPointer(window);
-        data.width = width;
-        data.height = height;
+        data.width = w;
+        data.height = h;
 
-        WindowResizeEvent event(width, height);
+        WindowResizeEvent event(w, h);
         data.event_callback(event);
     });
     glfwSetWindowCloseCallback(window_handle, [](GLFWwindow* window) {
