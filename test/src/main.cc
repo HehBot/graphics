@@ -76,12 +76,12 @@ int main()
     };
     window->set_event_callback(callback);
 
-    std::shared_ptr<Shader> shader = Shader::create({ "test/vert.glsl", "test/frag.glsl" });
+    std::shared_ptr<Shader> shader = Shader::create({ "shaders/vert.glsl", "shaders/frag.glsl" });
     shader->bind();
 
     shader->set_int("text", 0);
     glm::ivec2 size, bearing;
-    std::shared_ptr<Texture> tex = ft_load_glyph("test/arial.ttf", 'a', size, bearing);
+    std::shared_ptr<Texture> tex = ft_load_glyph("arial.ttf", 'a', size, bearing);
     tex->bind_to_slot(0);
 
     glm::vec3 text_color(0.5f, 0.8f, 0.2f);
