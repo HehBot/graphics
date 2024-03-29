@@ -22,7 +22,7 @@ public:
     virtual void set_float4(std::string const& name, glm::vec4 const& value) = 0;
     virtual void set_mat4(std::string const& name, glm::mat4 const& value) = 0;
 
-    static std::shared_ptr<Shader> create(std::initializer_list<std::string> shaderpaths);
+    static std::shared_ptr<Shader> load(std::initializer_list<std::string> shader_paths);
 
 protected:
     static Shader const* current;

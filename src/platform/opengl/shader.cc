@@ -10,31 +10,21 @@
 
 using namespace graphics;
 
-static GLenum shader_type_from_string(std::string const& type_str)
+static GLenum shader_type_from_extn(std::string const& extn)
 {
-    if (type_str == "vertex")
+    if (extn == "vert")
         return GL_VERTEX_SHADER;
-    else if (type_str == "fragment")
+    else if (extn == "frag")
         return GL_FRAGMENT_SHADER;
     assert(false && "Unknown shader type");
 }
 
 static std::string read_file(std::string path, GLenum& type)
 {
-    std::ifstream f(path);
-
-    std::string type_decl;
-    std::getline(f, type_decl);
-
-    std::string type_tag = "#type ";
-    if (type_decl.substr(0, type_tag.length()) != type_tag)
-        assert(false && "Syntax error");
-
-    std::string type_str = type_decl.substr(type_tag.length(), type_decl.length() - 1);
-
-    type = shader_type_from_string(type_str);
+    type = shader_type_from_extn(path.substr(path.length() - 4, 4));
 
     std::stringstream buf;
+    std::ifstream f(path);
     buf << f.rdbuf();
 
     assert(buf.str().length() != 0 && "Shader empty");
@@ -42,35 +32,29 @@ static std::string read_file(std::string path, GLenum& type)
     return buf.str();
 }
 
-OpenGLShader::OpenGLShader(std::initializer_list<std::string> shaderpaths)
+uint32_t OpenGLShader::compile(char const* src, uint32_t type)
 {
-    std::vector<uint32_t> shader_ids;
-    for (auto const& path : shaderpaths) {
-        GLenum type;
-        std::string source = read_file(path, type);
+    uint32_t id = glCreateShader(type);
 
-        uint32_t shader_id = glCreateShader(type);
+    glShaderSource(id, 1, &src, nullptr);
+    glCompileShader(id);
 
-        char const* w = source.c_str();
-        glShaderSource(shader_id, 1, &w, nullptr);
-        glCompileShader(shader_id);
-
-        // check for shader compile errors
-        int success;
-        glGetShaderiv(shader_id, GL_COMPILE_STATUS, &success);
-        if (!success) {
-            char infoLog[512];
-            glGetShaderInfoLog(shader_id, 512, nullptr, infoLog);
-            std::cerr << path << "ERROR::SHADER::COMPILATION_FAILED\n"
-                      << infoLog << std::endl;
-            assert(false);
-        }
-
-        shader_ids.push_back(shader_id);
+    // check for shader compile errors
+    int success;
+    glGetShaderiv(id, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        char infoLog[512];
+        glGetShaderInfoLog(id, 512, nullptr, infoLog);
+        std::cerr << "ERROR::SHADER::COMPILATION_FAILED\n"
+                  << infoLog << std::endl;
+        assert(false);
     }
-
-    id = glCreateProgram();
-    for (auto shader_id : shader_ids)
+    return id;
+}
+uint32_t OpenGLShader::link_and_cleanup(std::vector<uint32_t> ids)
+{
+    uint32_t id = glCreateProgram();
+    for (auto shader_id : ids)
         glAttachShader(id, shader_id);
     glLinkProgram(id);
 
@@ -85,13 +69,26 @@ OpenGLShader::OpenGLShader(std::initializer_list<std::string> shaderpaths)
         assert(false);
     }
 
-    for (auto shader_id : shader_ids) {
+    for (auto shader_id : ids) {
         glDetachShader(id, shader_id);
         glDeleteShader(shader_id);
     }
 
+    return id;
+}
+OpenGLShader::OpenGLShader(std::initializer_list<std::string> shader_paths)
+{
+    std::vector<uint32_t> shader_ids;
+    for (auto const& path : shader_paths) {
+        GLenum type;
+        std::string source = read_file(path, type);
+        uint32_t shader_id = compile(source.c_str(), type);
+        shader_ids.push_back(shader_id);
+    }
+    id = link_and_cleanup(shader_ids);
     load_uniform_locs();
 }
+
 void OpenGLShader::load_uniform_locs()
 {
     int count, bufSize;

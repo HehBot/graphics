@@ -76,7 +76,7 @@ int main()
     };
     window->set_event_callback(callback);
 
-    std::shared_ptr<Shader> shader = Shader::create({ "shaders/vert.glsl", "shaders/frag.glsl" });
+    std::shared_ptr<Shader> shader = Shader::load({ "shaders/basic.vert", "shaders/basic.frag" });
     shader->bind();
 
     shader->set_int("text", 0);

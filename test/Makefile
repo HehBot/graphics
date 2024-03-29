@@ -12,7 +12,6 @@ BUILD_DIR := build
 TARGET_EXEC := $(BIN_DIR)/$(TARGET_EXEC_NAME)
 
 SRCS := $(shell find $(SRC_DIR) -name '*.cc' -or -name '*.c')
-
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 
 DEPS := $(OBJS:.o=.d)

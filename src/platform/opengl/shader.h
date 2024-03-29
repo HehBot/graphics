@@ -4,10 +4,11 @@
 #include <glm/glm.hpp>
 #include <shader.h>
 #include <unordered_map>
+#include <vector>
 
 class OpenGLShader : public graphics::Shader {
 public:
-    OpenGLShader(std::initializer_list<std::string> shaderpaths);
+    OpenGLShader(std::initializer_list<std::string> shader_paths);
     virtual ~OpenGLShader();
 
     virtual void bind() const override;
@@ -22,6 +23,9 @@ public:
     virtual void set_mat4(std::string const& name, glm::mat4 const& value) override;
 
 private:
+    static uint32_t compile(char const* src, uint32_t type);
+    static uint32_t link_and_cleanup(std::vector<uint32_t> ids);
+
     void load_uniform_locs();
     uint32_t uniform_loc(std::string const& name) const;
 
